@@ -1,0 +1,25 @@
+{
+  "name": "game-framework",
+  "version": "1.0.0",
+  "description": "Framework for creating multi-user network games with socket.io",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "framework",
+    "socket.io",
+    "game"
+  ],
+  "author": "Joabson <joabsonlg918@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.11.0",
+    "socket.io": "^4.6.2"
+  }
+}

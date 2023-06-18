@@ -1,0 +1,77 @@
+@import './base.css';
+
+#app {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+
+    font-weight: normal;
+}
+
+.green {
+    text-decoration: none;
+    color: hsla(160, 100%, 37%, 1);
+    transition: 0.4s;
+}
+
+a {
+    color: lightgrey;
+}
+
+.router-link-active {
+    color: hsla(160, 100%, 37%, 1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    color: hsla(160, 100%, 37%, 1);
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid hsla(160, 100%, 37%, 1);
+    border-radius: 4px;
+    color: hsla(160, 100%, 37%, 1);
+    background-color: #181818;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    border: 0;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: hsla(160, 100%, 37%, 1);
+    color: #fff;
+    text-transform: uppercase;
+}
+
+@media (hover: hover) {
+    a:hover {
+        background-color: hsla(160, 100%, 37%, 0.2);
+    }
+}
+
+@media (min-width: 1024px) {
+    body {
+        display: flex;
+        place-items: center;
+    }
+
+    #app {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 0 2rem;
+    }
+}
