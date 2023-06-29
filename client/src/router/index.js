@@ -27,8 +27,9 @@ const router = createRouter({
         {
             path: '/lobby',
             name: 'lobby',
-            component: () => import('../views/LobbyView.vue')
-        }
+            component: () => import('../views/LobbyView.vue'),
+            //meta: { requiresAuth: true }
+        },
     ]
 })
 

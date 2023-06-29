@@ -18,6 +18,7 @@ const player = computed(() => playerStore.getPlayer);
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
+        <RouterLink v-if="player" to="/lobby">Enter the lobby</RouterLink> <!-- Exibe somente se o usuário estiver logado -->
       </nav>
     </div>
   </header>
