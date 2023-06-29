@@ -4,6 +4,8 @@ const http = require("http");
 const {Server} = require("socket.io");
 const routes = require('./routes');
 const {getPlayerByToken} = require("./controllers/loginController");
+const Lobby = require("./models/Lobby");
+const Message = require('./models/Message');
 
 class GameServer {
     constructor() {
@@ -15,6 +17,7 @@ class GameServer {
                 methods: ['GET', 'POST'],
             },
         });
+        this.lobby = new Lobby();
     }
 
     /**
@@ -43,24 +46,43 @@ class GameServer {
             console.log(`User connected: ${socket.id}`);
             socket.on('disconnect', () => {
                 console.log(`User disconnected: ${socket.id}`);
+
+                if (socket.playerId) {
+                    this.lobby.removePlayer(socket.playerId);
+                    this.io.emit('playerLeftLobby', socket.playerId);
+                }
             });
 
             socket.on('identify', async (data) => {
                 if (data.token) {
-                    const player = await getPlayerByToken(data.token);
-                    if (player) {
-                        socket.playerId = player.id;
-                        console.log(player)
-                        socket.emit('identified', player);
-                    } else {
-                        socket.emit('error', {error: 'Invalid token'});
+                  const player = await getPlayerByToken(data.token);
+                  if (player) {
+                    socket.playerId = player.id;
+                    console.log(player)
+                    socket.emit('identified', player);
+                    if (!this.lobby.hasPlayer(player.id)) {
+                      this.lobby.addPlayer(player);
+                      console.log('AI PAISDA', player);         
+                      this.io.emit('newPlayerInLobby', player);
                     }
+                  } else {
+                    socket.emit('error', { error: 'Invalid token' });
+                  }
                 }
             });
 
-            socket.on('chatMessage', (message) => {
-                this.io.emit('chatMessage', message);
+            socket.on('addLobbyMessage', ({ playerName, messageContent }) => {
+                this.lobby.addMessage(playerName, messageContent);
+                console.log()
+                this.io.emit('lobbyMessages', this.lobby.getMessages());
             });
+
+            socket.on('getLobbyPlayers', () => {
+                const players = this.lobby.getPlayers();
+                console.log(players);
+                socket.emit('lobbyPlayers', players);
+            });
+              
         });
     }
 
