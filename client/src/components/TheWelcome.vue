@@ -27,26 +27,4 @@ const player = computed(() => playerStore.getPlayer);
 </template>
 
 <style scoped>
-.g-1 {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.g-2 {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.g-3 {
-  display: flex;
-  gap: 1rem;
-}
-
-.d-flex {
-  display: flex;
-}
-
-.justify-content-between {
-  justify-content: space-between;
-}
 </style>

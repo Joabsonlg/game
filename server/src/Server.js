@@ -57,13 +57,12 @@ class GameServer {
                     } else {
                         socket.emit('error', {error: 'Invalid token'});
                     }
-                  } else {
-                    socket.emit('error', { error: 'Invalid token' });
-                  }
+                } else {
+                    socket.emit('error', {error: 'Invalid token'});
                 }
             });
 
-            socket.on('addLobbyMessage', ({ playerName, messageContent }) => {
+            socket.on('addLobbyMessage', ({playerName, messageContent}) => {
                 this.lobby.addMessage(playerName, messageContent);
                 console.log()
                 this.io.emit('lobbyMessages', this.lobby.getMessages());
@@ -74,7 +73,6 @@ class GameServer {
                 console.log(players);
                 socket.emit('lobbyPlayers', players);
             });
-              
 
             socket.on('createGame', () => {
                 const roomId = UUIDv4();
@@ -83,6 +81,7 @@ class GameServer {
                 this.games.push(game);
                 this.io.to(socket.id).emit('gameCreated', {roomId});
 
+                game.addPlayer(socket)
                 this.io.emit('availableGames', this.findAvailableGames());
             });
 
@@ -125,6 +124,10 @@ class GameServer {
                     }
                 }
             });
+
+            socket.on('getAvailableGames', () => {
+                socket.emit('availableGames', this.findAvailableGames());
+            });
         });
     }
 
@@ -142,7 +145,8 @@ class GameServer {
         return this.games.filter((game) => game.gameStatus === 'WAITING').map((game) => {
             return {
                 roomId: game.roomId,
-                players: game.players.length
+                players: game.players.length,
+                owner: game.principal,
             }
         });
     }

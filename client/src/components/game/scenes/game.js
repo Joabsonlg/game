@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import {Player} from "../classes/Player.js";
 import {socket} from "@/assets/js/socket";
 
-export class Game extends Phaser.Scene {
+export default class Game extends Phaser.Scene {
     constructor() {
         super('game');
         this.socket = socket;
@@ -10,17 +10,29 @@ export class Game extends Phaser.Scene {
 
     create() {
         initMap(this);
-        this.player = new Player(this, 100, 100, 'player');
         this.bombs = [];
-        this.physics.add.collider(this.player, this.wallsLayer);
     }
 
     update() {
-        const player = this.player;
+        if (!this.players) return;
 
-        if (!player) return;
+        const players = this.players.getChildren();
 
-        player.update();
+        players.forEach(player => player.update());
+    }
+
+    addPlayer(player, roomId) {
+        if (!this.players) {
+            this.players = this.physics.add.group();
+        }
+
+        const playerGame = new Player(this, player.x, player.y, 'player');
+        playerGame.playerId = player.id;
+        this.roomId = roomId;
+        playerGame.roomId = roomId;
+        playerGame.body.setCollideWorldBounds(true);
+        this.physics.add.collider(this.players, this.wallsLayer);
+        this.players.add(playerGame.setDepth(1), true);
     }
 }
 
@@ -42,3 +54,5 @@ const showDebugWalls = (context) => {
         collidingTileColor: new Phaser.Display.Color(243, 234, 48, 255),
     });
 }
+
+export const gameScene = new Game();

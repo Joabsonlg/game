@@ -30,9 +30,10 @@ export class Player extends Actor {
         this.anims.play(animationKey, true);
         if (movement.x !== 0 || movement.y !== 0) {
             this.move(movement.x, movement.y);
-            this.scene.socket.emit('player-move', {
-                player: this.scene.socket.id, animation: animationKey,
-                x: this.x, y: this.y
+            this.scene.socket.emit('playerMove', {
+                roomId: this.scene.roomId,
+                direction: animationKey,
+                position: {x: this.x, y: this.y}
             });
         } else {
             this.anims.stop();

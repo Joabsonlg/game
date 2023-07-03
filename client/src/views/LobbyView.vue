@@ -1,36 +1,75 @@
 <template>
-  <div class="lobby">
-    <h1>Lobby</h1>
-    <div class="lobby-content">
-      <div class="message-list">
-        <h2>Messages:</h2>
-        <ul>
-          <li v-for="message in messages" :key="message.id">
-            <strong>{{ message.playerUsername  }}:</strong> {{ message.content }}
-          </li>
-        </ul>
-      </div>
-
-      <div class="player-list">
-        <h2>Players:</h2>
-        <ul>
-          <li v-for="player in players" :key="player.id">
-            {{ player.username }}
-          </li>
-        </ul>
-      </div>
+  <div class="card">
+    <div class="card-header">
+      <h1>Lobby</h1>
     </div>
-    <div class="message-input">
-      <input v-model="newMessage" type="text" placeholder="Enter a message" />
-      <button @click="sendMessage">Send</button>
+    <div class="card-body lobby">
+      <div class="row">
+        <div class="col-6">
+          <div class="player-list">
+            <h2>Players online:</h2>
+            <ul>
+              <li v-for="player in players" :key="player.id">
+                {{ player.username }}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="player-list">
+            <div class="d-flex">
+              <h2>Jogos disponíveis:</h2>
+              <button @click="createGame">Criar jogo</button>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <table>
+                  <thead>
+                  <tr>
+                    <th>Room ID</th>
+                    <th>Players</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="game in availableGames" :key="game.roomId">
+                    <td>{{ game.roomId }}</td>
+                    <td>{{ game.players }}</td>
+                    <td>
+                      <button @click="joinGame(game.roomId)" v-if="game.owner !== socket.id">Entrar</button>
+                      <button @click="startGame(game.roomId)" v-if="game.owner === socket.id">Iniciar</button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="message-list">
+            <h2>Messages:</h2>
+            <ul>
+              <li v-for="message in messages" :key="message.id">
+                <strong>{{ message.playerUsername }}:</strong> {{ message.content }}
+              </li>
+            </ul>
+            <div class="message-input">
+              <input v-model="newMessage" type="text" placeholder="Enter a message"/>
+              <button @click="sendMessage">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import {onMounted, ref} from 'vue';
 import io from 'socket.io-client';
-import { usePlayerStore } from "@/stores/player";
+import {usePlayerStore} from "@/stores/player";
+import router from "@/router";
 
 const socket = io('http://localhost:3000');
 const playerStore = usePlayerStore();
@@ -38,6 +77,7 @@ const playerStore = usePlayerStore();
 const players = ref([]);
 const messages = ref([]);
 const newMessage = ref('');
+const availableGames = ref([]);
 
 const addLobbyMessage = (playerName, messageContent) => {
   const message = {
@@ -51,6 +91,10 @@ const addLobbyMessage = (playerName, messageContent) => {
 
 socket.on('lobbyPlayers', (lobbyPlayers) => {
   players.value = lobbyPlayers;
+});
+
+socket.on('availableGames', (games) => {
+  availableGames.value = games;
 });
 
 socket.on('lobbyMessages', (lobbyMessages) => {
@@ -73,7 +117,20 @@ socket.on('playerLeftLobby', (playerId) => {
 socket.on('identified', (player) => {
   playerStore.setPlayer(player);
   socket.emit('getLobbyPlayers');
+  socket.emit('getAvailableGames');
 });
+
+const createGame = () => {
+  socket.emit('createGame');
+};
+
+const joinGame = (roomId) => {
+  socket.emit('joinGame', {roomId});
+};
+
+const startGame = (roomId) => {
+  router.push({name: 'game', params: {roomId}});
+};
 
 const sendMessage = () => {
   if (newMessage.value.trim() === '') {
@@ -83,39 +140,24 @@ const sendMessage = () => {
   const playerName = playerStore.getPlayer.username;
   const messageContent = newMessage.value.trim();
 
-  socket.emit('addLobbyMessage', { playerName, messageContent });
+  socket.emit('addLobbyMessage', {playerName, messageContent});
 
   newMessage.value = '';
 };
 
 onMounted(() => {
-  socket.emit('identify', { token: localStorage.getItem('token') });
+  socket.emit('identify', {token: localStorage.getItem('token')});
 });
 </script>
 
 <style scoped>
 .lobby {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: #f1f1f1;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 h1 {
   margin-bottom: 1rem;
-}
-
-.lobby-content {
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-  max-width: 800px;
-  background-color: #fff;
-  padding: 1rem;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .player-list {
@@ -127,7 +169,8 @@ h1 {
 }
 
 .message-list {
-  flex: 2;
+  max-width: 500px;
+  overflow-y: auto;
 }
 
 .message-list h2 {

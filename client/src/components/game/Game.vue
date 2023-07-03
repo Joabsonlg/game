@@ -2,7 +2,7 @@
 import Phaser from "phaser";
 import {Boot} from "@/components/game/scenes/boot";
 import {PreGame} from "@/components/game/scenes/preGame";
-import {Game} from "@/components/game/scenes/game";
+import {gameScene} from "@/components/game/scenes/game";
 import {UIScene} from "@/components/game/scenes/ui/UI";
 import {onMounted} from "vue";
 import {usePlayerStore} from "@/stores/player";
@@ -20,7 +20,7 @@ const config = {
     }
   },
   backgroundColor: '#2d2d2d',
-  scene: [Boot, PreGame, Game, UIScene]
+  scene: [Boot, PreGame, gameScene, UIScene]
 }
 
 const playerStore = usePlayerStore();
@@ -51,19 +51,15 @@ onMounted(() => {
 
   socket.on('gameCreated', (game) => {
     console.log(`Game created: ${game.roomId}`);
+    gameScene.addPlayer({x: 100, y:100, id: socket.id}, game.roomId);
   });
 
   socket.on('gameJoined', (game) => {
     console.log(`Game joined: ${game.roomId}`);
   });
 
-  let created = false;
 
   socket.on('availableGames', (games) => {
-    if (!created) {
-      joinGame(games[0].roomId)
-      created = true;
-    }
   });
 
   presentation(socket);
