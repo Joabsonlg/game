@@ -57,6 +57,24 @@ button {
     text-transform: uppercase;
 }
 
+.card {
+    background-color: #181818;
+    border-radius: 4px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
+    min-width: 400px;
+}
+
+.card-header {
+    padding: 1rem;
+    border-bottom: 1px solid hsla(160, 100%, 37%, 1);
+    color: hsla(160, 100%, 37%, 1);
+}
+
+.card-body {
+    padding: 1rem;
+}
+
 @media (hover: hover) {
     a:hover {
         background-color: hsla(160, 100%, 37%, 0.2);
@@ -67,11 +85,5 @@ button {
     body {
         display: flex;
         place-items: center;
-    }
-
-    #app {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        padding: 0 2rem;
     }
 }

@@ -4,6 +4,8 @@ const http = require("http");
 const {Server} = require("socket.io");
 const routes = require('./routes');
 const {getPlayerByToken} = require("./controllers/loginController");
+const {v4: UUIDv4} = require('uuid');
+const Game = require("./game/Game");
 
 class GameServer {
     constructor() {
@@ -15,6 +17,7 @@ class GameServer {
                 methods: ['GET', 'POST'],
             },
         });
+        this.games = [];
     }
 
     /**
@@ -41,9 +44,6 @@ class GameServer {
     handleConnections() {
         this.io.on('connection', (socket) => {
             console.log(`User connected: ${socket.id}`);
-            socket.on('disconnect', () => {
-                console.log(`User disconnected: ${socket.id}`);
-            });
 
             socket.on('identify', async (data) => {
                 if (data.token) {
@@ -61,6 +61,75 @@ class GameServer {
             socket.on('chatMessage', (message) => {
                 this.io.emit('chatMessage', message);
             });
+
+            socket.on('createGame', () => {
+                const roomId = UUIDv4();
+                const game = new Game(roomId, socket.id);
+                game.setSocketIO(this.io);
+                this.games.push(game);
+                this.io.to(socket.id).emit('gameCreated', {roomId});
+
+                this.io.emit('availableGames', this.findAvailableGames());
+            });
+
+            socket.on('joinGame', (data) => {
+                const game = this.getGameByRoomId(data.roomId);
+                if (game) {
+                    game.addPlayer(socket);
+                    this.io.to(socket.id).emit('gameJoined', {roomId: data.roomId});
+                    this.io.emit('availableGames', this.findAvailableGames());
+                } else {
+                    this.io.to(socket.id).emit('error', {error: 'Game not found'});
+                }
+            });
+
+            socket.on('startGame', (data) => {
+                const game = this.getGameByRoomId(data.roomId);
+                if (game) {
+                    game.start(socket.id);
+                } else {
+                    this.io.to(socket.id).emit('error', {error: 'Game not found'});
+                }
+            });
+
+            socket.on('playerMove', (data) => {
+                const game = this.getGameByRoomId(data.roomId);
+                if (game) {
+                    game.playerMove(socket.id, data.direction, data.position);
+                } else {
+                    this.io.to(socket.id).emit('error', {error: 'Game not found'});
+                }
+            });
+
+            socket.on('disconnect', () => {
+                const game = this.games.find((game) => game.players.find((player) => player.id === socket.id));
+                if (game) {
+                    game.removePlayer(socket.id);
+                    if (game.players.length === 0) {
+                        console.log(`Game ${game.roomId} deleted`);
+                        this.games = this.games.filter((g) => g.roomId !== game.roomId);
+                    }
+                }
+            });
+        });
+    }
+
+    /**
+     * Get the game by room id
+     */
+    getGameByRoomId(roomId) {
+        return this.games.find((game) => game.roomId === roomId);
+    }
+
+    /**
+     * Find available games
+     */
+    findAvailableGames() {
+        return this.games.filter((game) => game.gameStatus === 'WAITING').map((game) => {
+            return {
+                roomId: game.roomId,
+                players: game.players.length
+            }
         });
     }
 
