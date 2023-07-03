@@ -50,7 +50,6 @@ class GameServer {
                     const player = await getPlayerByToken(data.token);
                     if (player) {
                         socket.playerId = player.id;
-                        console.log(player)
                         socket.emit('identified', player);
                     } else {
                         socket.emit('error', {error: 'Invalid token'});

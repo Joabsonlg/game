@@ -1,25 +1,30 @@
 <template>
-  <div class="login">
-    <form class="form" @submit="login">
-      <h1>Login page</h1>
-      <label for="email">Email</label>
-      <input type="email" id="email" v-model="email"/>
-      <label for="password">Password</label>
-      <input type="password" id="password" v-model="password"/>
+  <layout>
+    <div class="login card">
+      <h1 class="card-header">Login</h1>
+      <div class="card-body">
+        <form class="form" @submit="login">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" v-model="email"/>
+          <label for="password">Senha</label>
+          <input type="password" id="password" v-model="password"/>
 
-      <button type="submit">Login</button>
+          <button type="submit">Entrar</button>
 
-      <p>Don't have an account?
-        <RouterLink to="/register">Register</RouterLink>
-      </p>
-    </form>
-  </div>
+          <p>Ainda não possui uma conta?
+            <RouterLink to="/register">Cadastre-se</RouterLink>
+          </p>
+        </form>
+      </div>
+    </div>
+  </layout>
 </template>
 
 <script setup>
 import {useRouter} from 'vue-router'
 import {ref} from "vue";
 import axios from "axios";
+import layout from '../layouts/OnlyContentLayout.vue'
 
 const router = useRouter()
 
@@ -36,17 +41,7 @@ const login = async (event) => {
       await router.push('/game');
     }
   } catch (e) {
-    alert('Credenciais inv�lidas');
+    alert('Credenciais inválidas');
   }
 }
 </script>
-
-<style>
-@media (min-width: 1024px) {
-  .login {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
-</style>

@@ -1,0 +1,385 @@
+{
+    "frames": [
+        {
+            "filename": "idle00",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 1,
+                "y": 1
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down00",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 1,
+                "y": 1
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down01",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 22,
+                "y": 1
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down02",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 1,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down03",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 22,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down04",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 43,
+                "y": 1
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down05",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 43,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down06",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 1,
+                "y": 55
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right00",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 22,
+                "y": 55
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right01",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 43,
+                "y": 55
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right02",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 64,
+                "y": 1
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right03",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 64,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right04",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 64,
+                "y": 55
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right05",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 1,
+                "y": 82
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right06",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 22,
+                "y": 82
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up00",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 43,
+                "y": 82
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up01",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 64,
+                "y": 82
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up02",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 85,
+                "y": 1
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up03",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 85,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up04",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 85,
+                "y": 55
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up05",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 85,
+                "y": 82
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up06",
+            "frame": {
+                "w": 20,
+                "h": 26,
+                "x": 106,
+                "y": 1
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "left00",
+            "frame": {
+                "w": 20,
+                "h": 25,
+                "x": 106,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "left01",
+            "frame": {
+                "w": 20,
+                "h": 25,
+                "x": 106,
+                "y": 54
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "left02",
+            "frame": {
+                "w": 20,
+                "h": 25,
+                "x": 106,
+                "y": 80
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "left03",
+            "frame": {
+                "w": 20,
+                "h": 25,
+                "x": 106,
+                "y": 106
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "left04",
+            "frame": {
+                "w": 20,
+                "h": 25,
+                "x": 1,
+                "y": 109
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "left05",
+            "frame": {
+                "w": 20,
+                "h": 25,
+                "x": 22,
+                "y": 109
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "left06",
+            "frame": {
+                "w": 20,
+                "h": 25,
+                "x": 43,
+                "y": 109
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}
