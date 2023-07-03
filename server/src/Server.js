@@ -4,6 +4,8 @@ const http = require("http");
 const {Server} = require("socket.io");
 const routes = require('./routes');
 const {getPlayerByToken} = require("./controllers/loginController");
+const Lobby = require("./models/Lobby");
+const Message = require('./models/Message');
 const {v4: UUIDv4} = require('uuid');
 const Game = require("./game/Game");
 
@@ -17,6 +19,7 @@ class GameServer {
                 methods: ['GET', 'POST'],
             },
         });
+        this.lobby = new Lobby();
         this.games = [];
     }
 
@@ -54,12 +57,24 @@ class GameServer {
                     } else {
                         socket.emit('error', {error: 'Invalid token'});
                     }
+                  } else {
+                    socket.emit('error', { error: 'Invalid token' });
+                  }
                 }
             });
 
-            socket.on('chatMessage', (message) => {
-                this.io.emit('chatMessage', message);
+            socket.on('addLobbyMessage', ({ playerName, messageContent }) => {
+                this.lobby.addMessage(playerName, messageContent);
+                console.log()
+                this.io.emit('lobbyMessages', this.lobby.getMessages());
             });
+
+            socket.on('getLobbyPlayers', () => {
+                const players = this.lobby.getPlayers();
+                console.log(players);
+                socket.emit('lobbyPlayers', players);
+            });
+              
 
             socket.on('createGame', () => {
                 const roomId = UUIDv4();

@@ -1,3 +1,5 @@
+const Message = require('./Message');
+
 /**
  * Represents a lobby.
  */
@@ -37,7 +39,16 @@ class Lobby {
         this.players.splice(index, 1);
       }
     }
-  
+    
+    /**
+    * Checks if a player exists in the lobby.
+    * @param {string} playerId - The ID of the player to check.
+    * @returns {boolean} - True if the player exists, false otherwise.
+    */
+    hasPlayer(playerId) {
+      return this.players.some((player) => player.id === playerId);
+    }
+
     /**
      * Retrieves the players in the lobby.
      * @returns {Array} - The players in the lobby.
@@ -55,11 +66,20 @@ class Lobby {
     }
   
     /**
-     * Adds a message to the lobby.
-     * @param {Object} message - The message to add.
-     */
-    addMessage(message) {
+    * Adds a message to the lobby.
+    * @param {string} playerUsername - The username of the player who sent the message.
+    * @param {string} content - The content of the message.
+    */
+    addMessage(playerUsername, content) {
+      const message = new Message(playerUsername, content);
       this.messages.push(message);
+    }
+
+    /**
+    * Clears the messages in the lobby.
+    */
+    clearMessages() {
+      this.messages = [];
     }
   }
   
