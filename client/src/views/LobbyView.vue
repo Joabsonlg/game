@@ -20,9 +20,26 @@
         </ul>
       </div>
     </div>
+
     <div class="message-input">
       <input v-model="newMessage" type="text" placeholder="Enter a message" />
       <button @click="sendMessage">Send</button>
+    </div>
+
+    <div class="match-list">
+      <h2>Partidas Disponíveis:</h2>
+      <ul>
+        <li v-for="match in matches" :key="match.id">
+          <span v-if="match.status === 'created' && match.creator">{{ match.creator.username }}'s partida</span>
+          <span v-else>{{ match.creator ? match.creator.username : 'Unknown' }}'s partida (iniciada)</span>
+          <button @click="joinMatch(match.id)">Entrar</button>
+          <button v-if="match.status === 'created'" @click="startMatch(match.id)">Iniciar</button>
+        </li>
+      </ul>
+
+      <div class="create-match">
+        <button @click="createMatch">Create Match</button>
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +54,7 @@ const playerStore = usePlayerStore();
 
 const players = ref([]);
 const messages = ref([]);
+const matches = ref([]);
 const newMessage = ref('');
 
 const addLobbyMessage = (playerName, messageContent) => {
@@ -49,8 +67,9 @@ const addLobbyMessage = (playerName, messageContent) => {
   messages.value.push(message);
 };
 
-socket.on('lobbyPlayers', (lobbyPlayers) => {
-  players.value = lobbyPlayers;
+socket.on('lobbyData', ({ players: receivedPlayers, matches: receivedMatches }) => {
+  players.value = receivedPlayers;
+  matches.value = receivedMatches;
 });
 
 socket.on('lobbyMessages', (lobbyMessages) => {
@@ -74,6 +93,18 @@ socket.on('identified', (player) => {
   playerStore.setPlayer(player);
   socket.emit('getLobbyPlayers');
 });
+
+const createMatch = () => {
+  socket.emit('createMatch');
+};
+
+const joinMatch = (matchId) => {
+  socket.emit('joinMatch', matchId);
+};
+
+const startMatch = (matchId) => {
+  socket.emit('startMatch', matchId);
+};
 
 const sendMessage = () => {
   if (newMessage.value.trim() === '') {

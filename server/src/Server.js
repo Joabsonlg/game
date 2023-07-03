@@ -6,6 +6,8 @@ const routes = require('./routes');
 const {getPlayerByToken} = require("./controllers/loginController");
 const Lobby = require("./models/Lobby");
 const Message = require('./models/Message');
+const Match = require('./models/Match');
+
 
 class GameServer {
     constructor() {
@@ -79,10 +81,36 @@ class GameServer {
 
             socket.on('getLobbyPlayers', () => {
                 const players = this.lobby.getPlayers();
-                console.log(players);
-                socket.emit('lobbyPlayers', players);
+                const matches = this.lobby.getMatches();
+                socket.emit('lobbyData', { players, matches });
             });
-              
+            
+            socket.on('createMatch', () => {
+                const creator = this.lobby.getPlayer(socket.playerId);
+                const match = new Match(creator);
+                // Armazene a partida em algum lugar, como no objeto this.lobby
+                this.lobby.addMatch(match);
+                this.io.emit('matchCreated', match);
+            });
+
+            socket.on('joinMatch', (matchId) => {
+                const match = this.lobby.getMatch(matchId);
+                if (match) {
+                  const player = this.lobby.getPlayer(socket.playerId);
+                  if (!match.players.includes(player)) {
+                    match.players.push(player);
+                    this.io.emit('matchUpdated', match);
+                  }
+                }
+            });
+
+            socket.on('startMatch', (matchId) => {
+                const match = this.lobby.getMatch(matchId);
+                if (match && match.creator.id === socket.playerId && match.players.length >= 2) {
+                    match.status = "iniciada";
+                  this.io.emit('matchUpdated', match);
+                }
+            });
         });
     }
 
