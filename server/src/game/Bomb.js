@@ -15,3 +15,5 @@ class Bomb {
         this.timer = 3;
     }
 }
+
+module.exports = Bomb;

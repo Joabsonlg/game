@@ -15,7 +15,10 @@ export class Boot extends Phaser.Scene {
         this.load.image('logo', 'logo.svg');
         this.load.image('background', 'back2.png');
         this.load.atlas('bomb', 'bomba.png', 'bomba_atlas.json');
-        this.load.atlas('player', 'bomb.png', 'bomb_atlas.json');
+        this.load.atlas('player', 'player1.png', 'player1_atlas.json');
+        this.load.atlas('player2', 'player2.png', 'player2_atlas.json');
+        this.load.atlas('player3', 'player3.png', 'player3_atlas.json');
+        this.load.atlas('player4', 'player4.png', 'player4_atlas.json');
         this.load.image({
             key: 'tiles',
             url: 'tilemaps/tiles.png',

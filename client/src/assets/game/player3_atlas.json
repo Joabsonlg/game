@@ -1,0 +1,333 @@
+{
+    "frames": [
+        {
+            "filename": "idle000",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 0,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down000",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 0,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down001",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 28,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down002",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 0,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down003",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 28,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down004",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 56,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down005",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 56,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down006",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 0,
+                "y": 56
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "down007",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 28,
+                "y": 56
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right000",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 56,
+                "y": 56
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right001",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 84,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right002",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 84,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right003",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 84,
+                "y": 56
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right004",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 0,
+                "y": 84
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right005",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 28,
+                "y": 84
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right006",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 56,
+                "y": 84
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "right007",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 84,
+                "y": 84
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up000",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 112,
+                "y": 0
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up001",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 112,
+                "y": 28
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up002",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 112,
+                "y": 56
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up003",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 112,
+                "y": 84
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up004",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 0,
+                "y": 112
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up005",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 28,
+                "y": 112
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up006",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 56,
+                "y": 112
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        {
+            "filename": "up007",
+            "frame": {
+                "w": 28,
+                "h": 28,
+                "x": 84,
+                "y": 112
+            },
+            "anchor": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    ],
+    "meta": {
+        "description": "Atlas generado con Atlas Packer Gamma V2",
+        "web": "https://gammafp.github.io/atlas-packer-phaser/"
+    }
+}

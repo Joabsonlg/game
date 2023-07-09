@@ -59,6 +59,11 @@ onMounted(() => {
   socket.on('playerMoved', (player) => {
     gameScene.movePlayer(player);
   });
+
+  socket.on('bombAdded', (bomb) => {
+    gameScene.addBomb(bomb);
+  });
+
   presentation(socket);
 
   window.game = new Phaser.Game(config);

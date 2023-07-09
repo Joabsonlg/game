@@ -14,6 +14,10 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
             callbackScope: this,
             loop: false,
         });
+        this.body.setImmovable(true);
+    }
+
+    update() {
     }
 
     calculateDamage(x, y) {
