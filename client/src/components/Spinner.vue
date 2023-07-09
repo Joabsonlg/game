@@ -4,7 +4,7 @@
 
 <template>
   <div class="spinner">
-    <img src="../assets/spinner.svg" alt="logo" width="200"/>
+    <img src="../assets/img/spinner.svg" alt="logo" width="200"/>
   </div>
 </template>
 

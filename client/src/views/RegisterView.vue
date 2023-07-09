@@ -1,17 +1,25 @@
 <template>
-  <div class="register">
-    <form class="form" @submit="register">
-      <h1>Register page</h1>
-      <label for="username">Username</label>
-      <input type="text" id="username" v-model="username"/>
-      <label for="email">Email</label>
-      <input type="email" id="email" v-model="email"/>
-      <label for="password">Password</label>
-      <input type="password" id="password" v-model="password"/>
+  <layout>
+    <div class="card">
+      <h1 class="card-header">Cadastro</h1>
+      <div class="card-body">
+        <form class="form" @submit="register">
+          <label for="username">Username</label>
+          <input type="text" id="username" v-model="username"/>
+          <label for="email">Email</label>
+          <input type="email" id="email" v-model="email"/>
+          <label for="password">Password</label>
+          <input type="password" id="password" v-model="password"/>
 
-      <button type="submit">Register</button>
-    </form>
-  </div>
+          <button type="submit">Register</button>
+
+          <p>já possui uma conta?
+            <RouterLink to="/login">Entrar</RouterLink>
+          </p>
+        </form>
+      </div>
+    </div>
+  </layout>
 </template>
 
 <script setup>
@@ -43,13 +51,3 @@ const register = async (event) => {
   }
 }
 </script>
-
-<style>
-@media (min-width: 1024px) {
-  .register {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
-</style>
