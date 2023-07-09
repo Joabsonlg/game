@@ -4,6 +4,7 @@ import {Bomb} from "./Bomb.js";
 export class Player extends Actor {
     constructor(scene, x, y, texture) {
         super(scene, x, y, texture);
+        this.sprite = texture;
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.speed = 110;
@@ -16,7 +17,7 @@ export class Player extends Actor {
         };
 
         this.bombDelay = 2000;
-        this.initAnimations();
+        this.initAnimations(texture);
     }
 
     update() {
@@ -32,7 +33,11 @@ export class Player extends Actor {
         };
         const movement = getMovement();
         const animationKey = movement.animation || 'idle';
-        this.anims.play(animationKey, true);
+        this.anims.play(this.sprite + animationKey, true);
+
+        if (animationKey === 'left') this.setFlipX(true);
+        else if (animationKey === 'right') this.setFlipX(false);
+
         if (movement.x !== 0 || movement.y !== 0) {
             this.move(movement.x, movement.y);
             this.scene.socket.emit('playerMove', {
@@ -51,43 +56,44 @@ export class Player extends Actor {
     }
 
 
-    initAnimations() {
+    initAnimations(texture) {
+        console.log(texture);
         this.scene.anims.create({
-            key: 'left',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'left0',
-                end: 6
+            key: texture + 'left',
+            frames: this.scene.anims.generateFrameNames(texture, {
+                prefix: 'right00',
+                end: 7
             }),
             frameRate: 8
         });
         this.scene.anims.create({
-            key: 'right',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'right0',
-                end: 6
+            key: texture + 'right',
+            frames: this.scene.anims.generateFrameNames(texture, {
+                prefix: 'right00',
+                end: 7
             }),
             frameRate: 8
         });
         this.scene.anims.create({
-            key: 'up',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'up0',
-                end: 6
+            key: texture + 'up',
+            frames: this.scene.anims.generateFrameNames(texture, {
+                prefix: 'up00',
+                end: 7
             }),
             frameRate: 8
         });
         this.scene.anims.create({
-            key: 'down',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'down0',
-                end: 6
+            key: texture + 'down',
+            frames: this.scene.anims.generateFrameNames(texture, {
+                prefix: 'down00',
+                end: 7
             }),
             frameRate: 8,
         });
         this.scene.anims.create({
-            key: 'idle',
-            frames: this.scene.anims.generateFrameNames('player', {
-                prefix: 'idle0',
+            key: texture + 'idle',
+            frames: this.scene.anims.generateFrameNames(texture, {
+                prefix: 'idle00',
                 end: 0
             }),
             frameRate: 8,

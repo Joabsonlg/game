@@ -12,9 +12,7 @@ export default class Game extends Phaser.Scene {
         initMap(this);
         this.bombs = [];
 
-        this.physics.add.collider(this.players, this.wallsLayer, (player, wall) => {
-            console.log('colidiu cacete do caralho');
-        });
+        this.physics.add.collider(this.players, this.wallsLayer);
     }
 
     update() {
@@ -24,7 +22,6 @@ export default class Game extends Phaser.Scene {
 
         players.forEach((player) => {
             player.update();
-            // showDebugPlayer(player);
         });
     }
 
@@ -33,7 +30,7 @@ export default class Game extends Phaser.Scene {
             this.players = this.add.group();
         }
 
-        const playerGame = new Player(this, player.position.x, player.position.y, 'player');
+        const playerGame = new Player(this, player.position.x, player.position.y, player.sprite);
         playerGame.playerId = player.id;
         this.players.add(playerGame.setDepth(1), true);
     }
@@ -45,8 +42,6 @@ export default class Game extends Phaser.Scene {
     movePlayer(player) {
         const playerGame = this.findPlayerSpriteById(player.id);
 
-        console.log(`Moving player: ${player.id}, params: ${player.position.x}, ${player.position.y}`);
-        console.log(player.id, this.socket.playerId);
         if (player.id === this.socket.playerId) return;
 
         playerGame.definePosition(player.position.x, player.position.y);
@@ -71,32 +66,6 @@ const showDebugWalls = (context) => {
         tileColor: null,
         collidingTileColor: new Phaser.Display.Color(243, 234, 48, 255),
     });
-}
-
-const showDebugPlayer = (player) => {
-    const debugGraphics = player.scene.add.graphics().setAlpha(0.7);
-    player.body.debugGraphic = debugGraphics;
-    player.scene.physics.world.debugGraphic = debugGraphics;
-
-    player.scene.physics.world.createDebugGraphic();
-
-    player.scene.physics.world.debugGraphic.clear();
-    player.body.debugGraphic.clear();
-
-    player.scene.physics.world.debugGraphic.lineStyle(1, 0xffffff);// branco
-    player.scene.physics.world.debugGraphic.strokeRect(player.body.position.x, player.body.position.y, player.body.width, player.body.height);
-    //
-    player.scene.physics.world.debugGraphic.fillStyle(0x0000ff, 0.5); // azul
-    player.scene.physics.world.debugGraphic.fillRect(player.body.position.x, player.body.position.y, player.body.width, player.body.height);
-
-    // Posição visual atual do player
-    // player.scene.physics.world.debugGraphic.lineStyle(1, 0x00ff00); // verde
-    // player.scene.physics.world.debugGraphic.strokeRect(player.x - player.width / 2, player.y - player.height / 2, player.width, player.height);
-
-    // Posição do body do player
-    // player.scene.physics.world.debugGraphic.lineStyle(1, 0xff0000); // vermelho
-    // player.scene.physics.world.debugGraphic.strokeRect(player.body.x, player.body.y, player.body.width, player.body.height);
-    console.log('buceta')
 }
 
 export const gameScene = new Game();
