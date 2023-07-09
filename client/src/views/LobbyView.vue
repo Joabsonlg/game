@@ -15,29 +15,38 @@
             </ul>
           </div>
         </div>
-        <div class="col-6">
+        <div class="col-12">
           <div class="player-list">
             <div class="d-flex">
               <h2>Jogos disponíveis:</h2>
-              <button @click="createGame">Criar jogo</button>
+              <button @click="createGame" v-if="availableGames.find((game) => game.owner === socket.id) === undefined"
+                      class="ml-auto">Criar jogo
+              </button>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top: 10px">
               <div class="col-12">
-                <table>
-                  <thead>
+                <table style="border: 1px solid white">
+                  <thead style="text-align: left">
                   <tr>
-                    <th>Room ID</th>
-                    <th>Players</th>
+                    <th style="border: 1px solid white">Room ID</th>
+                    <th style="border: 1px solid white">Players</th>
+                    <th style="border: 1px solid white">Status</th>
                     <th></th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr v-for="game in availableGames" :key="game.roomId">
-                    <td>{{ game.roomId }}</td>
-                    <td>{{ game.players }}</td>
-                    <td>
-                      <button @click="joinGame(game.roomId)" v-if="game.owner !== socket.id">Entrar</button>
-                      <button @click="startGame(game.roomId)" v-if="game.owner === socket.id">Iniciar</button>
+                    <td style="border: 1px solid white">{{ game.roomId }}</td>
+                    <td style="border: 1px solid white">{{ game.players }}</td>
+                    <td style="border: 1px solid white">{{ game.status }}</td>
+                    <td style="border: 1px solid white">
+                      opa: {{ socket.playerId }}
+                      <button @click="joinGame(game.roomId)"
+                              v-if="game.owner !== socket.playerId && game.status === 'WAITING'">Entrar
+                      </button>
+                      <button @click="startGame(game.roomId)" :disabled="game.players < 2"
+                              v-if="game.owner === socket.playerId && game.status === 'WAITING'">Iniciar
+                      </button>
                     </td>
                   </tr>
                   </tbody>
@@ -69,10 +78,12 @@
 import {onMounted, ref} from 'vue';
 import io from 'socket.io-client';
 import {usePlayerStore} from "@/stores/player";
+import {useGameStore} from "@/stores/game";
 import router from "@/router";
 
 const socket = io('http://localhost:3000');
 const playerStore = usePlayerStore();
+const gameStore = useGameStore();
 
 const players = ref([]);
 const messages = ref([]);
@@ -116,8 +127,15 @@ socket.on('playerLeftLobby', (playerId) => {
 
 socket.on('identified', (player) => {
   playerStore.setPlayer(player);
+  socket.playerId = player.id;
   socket.emit('getLobbyPlayers');
   socket.emit('getAvailableGames');
+});
+
+socket.on('gameStarted', (gameState) => {
+  const roomId = gameState.roomId;
+  gameStore.setGameState(gameState);
+  router.push({name: 'game', params: {roomId}});
 });
 
 const createGame = () => {
@@ -129,7 +147,7 @@ const joinGame = (roomId) => {
 };
 
 const startGame = (roomId) => {
-  router.push({name: 'game', params: {roomId}});
+  socket.emit('startGame', {roomId});
 };
 
 const sendMessage = () => {
@@ -217,5 +235,10 @@ button:hover {
 
 button:focus {
   outline: none;
+}
+
+button:disabled {
+  background-color: #5f84ad;
+  cursor: not-allowed;
 }
 </style>

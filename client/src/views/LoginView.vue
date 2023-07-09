@@ -38,7 +38,7 @@ const login = async (event) => {
     const response = await axios.post(`${baseURL}/login`, {email: email.value, password: password.value});
     if (response.data?.token) {
       localStorage.setItem('token', response.data.token);
-      await router.push('/game');
+      await router.push('/lobby');
     }
   } catch (e) {
     alert('Credenciais inválidas');

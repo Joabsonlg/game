@@ -1,4 +1,8 @@
 import Phaser from 'phaser'
+import {gameScene} from "@/components/game/scenes/game";
+import {useGameStore} from "@/stores/game";
+
+const gameStore = useGameStore();
 
 export class Boot extends Phaser.Scene {
     constructor() {
@@ -9,7 +13,7 @@ export class Boot extends Phaser.Scene {
         this.load.baseURL = '/src/assets/game/';
 
         this.load.image('logo', 'logo.svg');
-        this.load.image('background', 'back1.png');
+        this.load.image('background', 'back2.png');
         this.load.atlas('bomb', 'bomba.png', 'bomba_atlas.json');
         this.load.atlas('player', 'bomb.png', 'bomb_atlas.json');
         this.load.image({
@@ -28,7 +32,12 @@ export class Boot extends Phaser.Scene {
         this.add.image(this.game.config.width / 2, this.game.config.height / 2 - 25, 'logo');
         this.add.text(this.game.config.width / 2, this.game.config.height / 2 + 25, 'Loading game...').setOrigin(0.5);
         setTimeout(() => {
-            this.scene.start('preGame');
-        }, 1000);
+            const players = gameStore.gameState.players;
+            players.forEach((player) => {
+                gameScene.addPlayer(player);
+            });
+
+            this.scene.start('game');
+        }, 3000);
     }
 }

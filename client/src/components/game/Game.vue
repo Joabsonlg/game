@@ -7,6 +7,8 @@ import {UIScene} from "@/components/game/scenes/ui/UI";
 import {onMounted} from "vue";
 import {usePlayerStore} from "@/stores/player";
 import {socket} from "@/assets/js/socket";
+import {useRoute} from "vue-router";
+import {useGameStore} from "@/stores/game";
 
 const config = {
   type: Phaser.AUTO,
@@ -23,7 +25,12 @@ const config = {
   scene: [Boot, PreGame, gameScene, UIScene]
 }
 
+const route = useRoute();
+const roomId = route.params.roomId;
+gameScene.roomId = roomId;
+
 const playerStore = usePlayerStore();
+const gameStore = useGameStore();
 
 const presentation = (socket) => {
   setTimeout(() => {
@@ -46,34 +53,16 @@ onMounted(() => {
 
   socket.on('identified', (player) => {
     playerStore.setPlayer(player);
-    createGame();
+    socket.playerId = player.id;
   });
 
-  socket.on('gameCreated', (game) => {
-    console.log(`Game created: ${game.roomId}`);
-    gameScene.addPlayer({x: 100, y:100, id: socket.id}, game.roomId);
+  socket.on('playerMoved', (player) => {
+    gameScene.movePlayer(player);
   });
-
-  socket.on('gameJoined', (game) => {
-    console.log(`Game joined: ${game.roomId}`);
-  });
-
-
-  socket.on('availableGames', (games) => {
-  });
-
   presentation(socket);
 
   window.game = new Phaser.Game(config);
 })
-
-const createGame = () => {
-  socket.emit('createGame');
-}
-
-const joinGame = (room) => {
-  socket.emit('joinGame', {roomId: room});
-}
 </script>
 
 <template>

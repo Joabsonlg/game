@@ -4,13 +4,17 @@ import {Bomb} from "./Bomb.js";
 export class Player extends Actor {
     constructor(scene, x, y, texture) {
         super(scene, x, y, texture);
+        scene.add.existing(this);
+        scene.physics.add.existing(this);
         this.speed = 110;
+
         this.movementMap = {
             left: {x: -this.speed, y: 0, animation: 'left'},
             right: {x: this.speed, y: 0, animation: 'right'},
             up: {x: 0, y: -this.speed, animation: 'up'},
             down: {x: 0, y: this.speed, animation: 'down'}
         };
+
         this.bombDelay = 2000;
         this.initAnimations();
     }
@@ -18,6 +22,7 @@ export class Player extends Actor {
     update() {
         this.setVelocity(0)
         const getMovement = () => {
+            if (this.scene.socket.playerId !== this.playerId) return {x: 0, y: 0};
             for (const direction in this.movementMap) {
                 if (this.scene.input.keyboard.createCursorKeys()[direction].isDown) {
                     return this.movementMap[direction];
@@ -87,5 +92,9 @@ export class Player extends Actor {
             }),
             frameRate: 8,
         });
+    }
+
+    definePosition(x, y) {
+        this.setPosition(x, y);
     }
 }

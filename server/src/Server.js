@@ -57,6 +57,10 @@ class GameServer {
                     } else {
                         socket.emit('error', {error: 'Invalid token'});
                     }
+                    const game = this.games.find((game) => game.players.find((player) => player.id === socket.playerId));
+                    if (game) {
+                        socket.join(game.roomId);
+                    }
                 } else {
                     socket.emit('error', {error: 'Invalid token'});
                 }
@@ -70,7 +74,6 @@ class GameServer {
 
             socket.on('getLobbyPlayers', () => {
                 const players = this.lobby.getPlayers();
-                console.log(players);
                 socket.emit('lobbyPlayers', players);
             });
 
@@ -89,7 +92,7 @@ class GameServer {
                 const game = this.getGameByRoomId(data.roomId);
                 if (game) {
                     game.addPlayer(socket);
-                    this.io.to(socket.id).emit('gameJoined', {roomId: data.roomId});
+                    this.io.to(data.roomId).emit('gameJoined', {roomId: data.roomId});
                     this.io.emit('availableGames', this.findAvailableGames());
                 } else {
                     this.io.to(socket.id).emit('error', {error: 'Game not found'});
@@ -99,7 +102,8 @@ class GameServer {
             socket.on('startGame', (data) => {
                 const game = this.getGameByRoomId(data.roomId);
                 if (game) {
-                    game.start(socket.id);
+                    game.start(socket.playerId);
+                    this.io.emit('availableGames', this.findAvailableGames());
                 } else {
                     this.io.to(socket.id).emit('error', {error: 'Game not found'});
                 }
@@ -108,7 +112,7 @@ class GameServer {
             socket.on('playerMove', (data) => {
                 const game = this.getGameByRoomId(data.roomId);
                 if (game) {
-                    game.playerMove(socket.id, data.direction, data.position);
+                    game.playerMove(socket.playerId, data.direction, data.position);
                 } else {
                     this.io.to(socket.id).emit('error', {error: 'Game not found'});
                 }
@@ -119,9 +123,11 @@ class GameServer {
                 if (game) {
                     game.removePlayer(socket.id);
                     if (game.players.length === 0) {
-                        console.log(`Game ${game.roomId} deleted`);
                         this.games = this.games.filter((g) => g.roomId !== game.roomId);
+                    } else {
+                        game.principal = game.players[0].id;
                     }
+                    this.io.emit('availableGames', this.findAvailableGames());
                 }
             });
 
@@ -147,6 +153,7 @@ class GameServer {
                 roomId: game.roomId,
                 players: game.players.length,
                 owner: game.principal,
+                status: game.gameStatus
             }
         });
     }

@@ -30,13 +30,22 @@ class Game {
      */
     addPlayer(socket) {
         if (!this.isFull()) {
-            const player = new Player(socket.id, this.selectSprite());
+            if (this.players.find((player) => player.id === socket.playerId)) {
+                return socket.emit('error', {error: 'Player already added'});
+            }
 
+            const player = new Player(socket.playerId, this.selectSprite());
+
+            if (this.players.length === 0) {
+                this.principal = player.id;
+            }
             this.players.push(player);
 
             socket.join(this.roomId);
             socket.emit('playerAdded', player);
             this.io.to(this.roomId).emit('playersUpdated', this.players);
+        } else {
+            return socket.emit('error', {error: 'Game is full'});
         }
     }
 
@@ -123,7 +132,16 @@ class Game {
         }
 
         this.setStatus('STARTED');
-        this.io.to(this.roomId).emit('gameStarted');
+
+        const gameState = {
+            players: this.players,
+            bombs: this.bombs,
+            gameStatus: this.gameStatus,
+            roomId: this.roomId,
+            principal: this.principal
+        }
+
+        this.io.to(this.roomId).emit('gameStarted', gameState);
     }
 
     /**
