@@ -90,6 +90,14 @@ class Game {
                 players.forEach((player) => {
                     player.removeLife();
                     this.io.to(this.roomId).emit('playerUpdated', player);
+
+
+                    console.log(player.lives)
+                    if(player.lives === 0){
+                        console.log("DESGRAÇA MORREU")
+                        this.io.to(this.roomId).emit('playerDead', player);
+                    }
+
                     console.log(`O player ${player.id} perdeu uma vida`);
                 });
             }, 3000);

@@ -37,6 +37,13 @@ class Player {
     }
 
     /**
+    * Check if player is alive
+    */
+    isAlive(){
+        return this.isAlive;
+    }
+
+    /**
      * Add a life to the player.
      */
     addLife() {

@@ -28,11 +28,23 @@ export default class Game extends Phaser.Scene {
         players.forEach((player) => {
             player.update();
         });
-
+    
         const bombs = this.bombs.getChildren();
         bombs.forEach((bomb) => {
             bomb.update();
         });
+    
+        const alivePlayers = players.filter((player) => player.isAlive);
+        
+        if (alivePlayers.length === 1) {
+            const winner = alivePlayers[0];
+      
+            if (winner.playerId === this.socket.playerId) {
+              this.scene.start('gameEnd', { message: 'Parabéns! Você venceu!' });
+            } else {
+              this.scene.start('gameEnd', { message: 'Você perdeu! Melhor sorte na próxima vez.' });
+            }
+        }
     }
 
     addPlayer(player) {
@@ -42,8 +54,10 @@ export default class Game extends Phaser.Scene {
 
         const playerGame = new Player(this, player.position.x, player.position.y, player.sprite);
         playerGame.playerId = player.id;
+        playerGame.isAlive = true;
         this.players.add(playerGame.setDepth(1), true);
     }
+    
 
     findPlayerSpriteById(playerId) {
         return this.players.getChildren().find(sprite => sprite.playerId === playerId);

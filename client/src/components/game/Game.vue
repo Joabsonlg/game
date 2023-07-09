@@ -1,14 +1,15 @@
 <script setup>
 import Phaser from "phaser";
-import {Boot} from "@/components/game/scenes/boot";
-import {PreGame} from "@/components/game/scenes/preGame";
-import {gameScene} from "@/components/game/scenes/game";
-import {uiScene} from "@/components/game/scenes/ui/UI";
-import {onMounted} from "vue";
-import {usePlayerStore} from "@/stores/player";
-import {socket} from "@/assets/js/socket";
-import {useRoute} from "vue-router";
-import {useGameStore} from "@/stores/game";
+import { Boot } from "@/components/game/scenes/boot";
+import { PreGame } from "@/components/game/scenes/preGame";
+import { GameEnd } from "@/components/game/scenes/gameEnd";
+import { gameScene } from "@/components/game/scenes/game";
+import { uiScene } from "@/components/game/scenes/ui/UI";
+import { onMounted } from "vue";
+import { usePlayerStore } from "@/stores/player";
+import { socket } from "@/assets/js/socket";
+import { useRoute } from "vue-router";
+import { useGameStore } from "@/stores/game";
 
 const config = {
   type: Phaser.AUTO,
@@ -22,7 +23,7 @@ const config = {
     },
   },
   backgroundColor: '#2d2d2d',
-  scene: [Boot, PreGame, gameScene, uiScene]
+  scene: [Boot, PreGame, gameScene, uiScene, GameEnd]
 }
 
 const route = useRoute();
@@ -77,6 +78,16 @@ onMounted(() => {
   socket.on('playerUpdated', (player) => {
     gameScene.updatePlayer(player);
   });
+
+  socket.on('playerDead', () => {
+    console.log("escutei ele morrendo")
+    const player = gameScene.players.get(socket.playerId);
+    if (player) {
+      player.isAlive = false;
+    }
+  });
+
+
 
   presentation(socket);
 
