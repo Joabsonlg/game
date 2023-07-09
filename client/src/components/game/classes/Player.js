@@ -68,6 +68,14 @@ export class Player extends Actor {
         uiScene.setLife(this.lives);
     }
 
+    collectItem(item) {
+        this.scene.socket.emit('itemCollected', {
+          roomId: this.scene.roomId,
+          playerId: this.playerId,
+          item
+        });
+    }
+
     initAnimations(texture) {
         console.log(texture);
         this.scene.anims.create({
