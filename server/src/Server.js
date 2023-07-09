@@ -54,6 +54,7 @@ class GameServer {
                     if (player) {
                         socket.playerId = player.id;
                         socket.emit('identified', player);
+                        this.io.emit('lobbyMessages', this.lobby.getMessages());
                     } else {
                         socket.emit('error', {error: 'Invalid token'});
                     }

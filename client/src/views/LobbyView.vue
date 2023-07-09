@@ -6,56 +6,6 @@
     <div class="card-body lobby">
       <div class="row">
         <div class="col-6">
-          <div class="player-list">
-            <h2>Players online:</h2>
-            <ul>
-              <li v-for="player in players" :key="player.id">
-                {{ player.username }}
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="player-list">
-            <div class="d-flex">
-              <h2>Jogos disponíveis:</h2>
-              <button @click="createGame" v-if="availableGames.find((game) => game.owner === socket.id) === undefined"
-                      class="ml-auto">Criar jogo
-              </button>
-            </div>
-            <div class="row" style="margin-top: 10px">
-              <div class="col-12">
-                <table style="border: 1px solid white">
-                  <thead style="text-align: left">
-                  <tr>
-                    <th style="border: 1px solid white">Room ID</th>
-                    <th style="border: 1px solid white">Players</th>
-                    <th style="border: 1px solid white">Status</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr v-for="game in availableGames" :key="game.roomId">
-                    <td style="border: 1px solid white">{{ game.roomId }}</td>
-                    <td style="border: 1px solid white">{{ game.players }}</td>
-                    <td style="border: 1px solid white">{{ game.status }}</td>
-                    <td style="border: 1px solid white">
-                      opa: {{ socket.playerId }}
-                      <button @click="joinGame(game.roomId)"
-                              v-if="game.owner !== socket.playerId && game.status === 'WAITING'">Entrar
-                      </button>
-                      <button @click="startGame(game.roomId)" :disabled="game.players < 2"
-                              v-if="game.owner === socket.playerId && game.status === 'WAITING'">Iniciar
-                      </button>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6">
           <div class="message-list">
             <h2>Messages:</h2>
             <ul>
@@ -64,8 +14,60 @@
               </li>
             </ul>
             <div class="message-input">
-              <input v-model="newMessage" type="text" placeholder="Enter a message"/>
+              <input v-model="newMessage" type="text" placeholder="Enter a message" />
               <button @click="sendMessage">Send</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="player-list">
+            <div class="d-flex">
+              <h2>Jogos disponíveis:</h2>
+            </div>
+            <div class="row" style="margin-top: 10px">
+              <div class="col-12">
+                <table class="game-table">
+                  <thead style="text-align: left">
+                    <tr>
+                      <th>Room ID</th>
+                      <th>Players</th>
+                      <th>Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="game in availableGames" :key="game.roomId">
+                      <td>{{ game.roomId }}</td>
+                      <td>{{ game.players }}</td>
+                      <td>{{ game.status }}</td>
+                      <td>
+                        <button
+                          @click="joinGame(game.roomId)"
+                          v-if="game.owner !== socket.playerId && game.status === 'WAITING'"
+                        >
+                          Entrar
+                        </button>
+                        <button
+                          @click="startGame(game.roomId)"
+                          :disabled="game.players < 2"
+                          v-if="game.owner === socket.playerId && game.status === 'WAITING'"
+                        >
+                          Iniciar
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="d-flex justify-content-center">
+              <button style="margin-top: 1rem;"
+                @click="createGame"
+                v-if="availableGames.find((game) => game.owner === socket.id) === undefined"
+                class="ml-auto"
+              >
+                Criar jogo
+              </button>
             </div>
           </div>
         </div>
@@ -110,19 +112,6 @@ socket.on('availableGames', (games) => {
 
 socket.on('lobbyMessages', (lobbyMessages) => {
   messages.value = lobbyMessages;
-});
-
-socket.on('newPlayerInLobby', (player) => {
-  players.value.push(player);
-  addLobbyMessage(player.username, 'has entered the chat.');
-});
-
-socket.on('playerLeftLobby', (playerId) => {
-  const player = players.value.find((p) => p.id === playerId);
-  if (player) {
-    players.value = players.value.filter((p) => p.id !== playerId);
-    addLobbyMessage(player.username, 'has left the chat.');
-  }
 });
 
 socket.on('identified', (player) => {
@@ -178,21 +167,32 @@ h1 {
   margin-bottom: 1rem;
 }
 
+.message-list {
+  max-width: 500px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.message-list h2 {
+  margin-bottom: 0.5rem;
+}
+
 .player-list {
-  flex: 1;
+  max-width: 500px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1rem;
 }
 
 .player-list h2 {
   margin-bottom: 0.5rem;
 }
 
-.message-list {
-  max-width: 500px;
-  overflow-y: auto;
-}
-
-.message-list h2 {
-  margin-bottom: 0.5rem;
+.d-flex{
+  justify-content: center;
 }
 
 ul {
@@ -241,4 +241,25 @@ button:disabled {
   background-color: #5f84ad;
   cursor: not-allowed;
 }
+
+.game-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.game-table th,
+.game-table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+}
+
+.game-table th {
+  font-weight: bold;
+}
 </style>
+
+
+
+
+
+
