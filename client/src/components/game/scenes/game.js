@@ -57,9 +57,23 @@ export default class Game extends Phaser.Scene {
         playerGame.definePosition(player.position.x, player.position.y);
     }
 
+    updatePlayer(player) {
+        const playerGame = this.findPlayerSpriteById(player.id);
+
+        playerGame.updatePlayer(player);
+    }
+
     addBomb(bomb) {
         const item = new Bomb(this, bomb.x, bomb.y, 'bomb');
+        item.id = bomb.id;
         this.bombs.add(item.setDepth(1), true);
+    }
+
+    explodeBomb(bomb) {
+        const item = this.bombs.getChildren().find(it => {
+            return bomb.id === it.id
+        });
+        item.explode();
     }
 }
 
@@ -72,7 +86,7 @@ const initMap = (context) => {
     context.wallsLayer = context.map.createLayer('walls', context.tileset, 0, 0);
     context.wallsLayer.setCollisionByProperty({collides: true});
 
-    showDebugWalls(context);
+    // showDebugWalls(context);
 }
 
 const showDebugWalls = (context) => {

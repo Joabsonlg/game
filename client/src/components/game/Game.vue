@@ -3,7 +3,7 @@ import Phaser from "phaser";
 import {Boot} from "@/components/game/scenes/boot";
 import {PreGame} from "@/components/game/scenes/preGame";
 import {gameScene} from "@/components/game/scenes/game";
-import {UIScene} from "@/components/game/scenes/ui/UI";
+import {uiScene} from "@/components/game/scenes/ui/UI";
 import {onMounted} from "vue";
 import {usePlayerStore} from "@/stores/player";
 import {socket} from "@/assets/js/socket";
@@ -22,7 +22,7 @@ const config = {
     }
   },
   backgroundColor: '#2d2d2d',
-  scene: [Boot, PreGame, gameScene, UIScene]
+  scene: [Boot, PreGame, gameScene, uiScene]
 }
 
 const route = useRoute();
@@ -62,6 +62,14 @@ onMounted(() => {
 
   socket.on('bombAdded', (bomb) => {
     gameScene.addBomb(bomb);
+  });
+
+  socket.on('bombExploded', (bomb) => {
+    gameScene.explodeBomb(bomb);
+  });
+
+  socket.on('playerUpdated', (player) => {
+    gameScene.updatePlayer(player);
   });
 
   presentation(socket);

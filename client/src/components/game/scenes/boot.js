@@ -41,6 +41,7 @@ export class Boot extends Phaser.Scene {
             });
 
             this.scene.start('game');
-        }, 3000);
+            this.scene.start('ui-scene');
+        }, 2000);
     }
 }

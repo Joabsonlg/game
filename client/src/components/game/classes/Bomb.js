@@ -1,5 +1,4 @@
 export class Bomb extends Phaser.Physics.Arcade.Sprite {
-    const
     damage = 100;
 
     constructor(scene, x, y, texture, frame) {
@@ -8,12 +7,6 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
         this.initAnimations();
         this.anims.play('burn', true);
-        this.timer = this.scene.time.addEvent({
-            delay: 3000,
-            callback: this.explode,
-            callbackScope: this,
-            loop: false,
-        });
         this.body.setImmovable(true);
     }
 
@@ -27,6 +20,18 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
 
     explode() {
         this.anims.play('explosion', true);
+
+        // Desenhar um círculo de explosão
+        const circle = new Phaser.Geom.Circle(this.x, this.y, 50);
+        const graphics = this.scene.add.graphics({ fillStyle: { color: 0xff0000 } });
+        graphics.fillCircleShape(circle);
+        this.scene.time.addEvent({
+            delay: 100,
+            callback: () => {
+                graphics.destroy();
+            }
+        });
+
         this.scene.tweens.add({
             targets: this,
             duration: 1000,
@@ -35,11 +40,6 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
                 this.destroy();
             },
         });
-
-        // this.scene.physics.add.overlap(this, this.scene.player, (bomb, player) => {
-        //     player.takeDamage(this.calculateDamage(player.x, player.y));
-        //     bomb.destroy();
-        // });
     }
 
     initAnimations() {

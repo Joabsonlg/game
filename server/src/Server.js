@@ -128,6 +128,16 @@ class GameServer {
                 }
             });
 
+            socket.on('playerDamage', (data) => {
+                const game = this.getGameByRoomId(data.roomId);
+                if (game) {
+                    console.log(`O jogador ${data.playerId} levou dano`);
+                    // game.addBomb(socket.playerId);
+                } else {
+                    this.io.to(socket.id).emit('error', {error: 'Game not found'});
+                }
+            });
+
 
             socket.on('disconnect', () => {
                 const game = this.games.find((game) => game.players.find((player) => player.id === socket.id));

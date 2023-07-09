@@ -74,6 +74,23 @@ class Game {
             player.timeOfLastBomb = new Date();
             this.bombs.push(bomb);
             this.io.to(this.roomId).emit('bombAdded', bomb);
+            console.log(`A bomba ${bomb.id} foi adicionada`);
+            setTimeout(() => {
+                console.log(`A bomba ${bomb.id} explodiu`);
+                this.io.to(this.roomId).emit('bombExploded', bomb);
+
+                // verificar se existe algum jogador no raio de 50
+                const players = this.players.filter((player) => {
+                    return player.position.x >= bomb.x - 50 && player.position.x <= bomb.x + 50 &&
+                        player.position.y >= bomb.y - 50 && player.position.y <= bomb.y + 50;
+                });
+                players.forEach((player) => {
+                    player.removeLife();
+                    this.io.to(this.roomId).emit('playerUpdated', player);
+                    console.log(`O player ${player.id} perdeu uma vida`);
+                });
+            }, 3000);
+            console.log(`A bomba ${bomb.id} vai explodir em 3 segundos`);
         }
     }
 

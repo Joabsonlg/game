@@ -173,6 +173,7 @@ h1 {
   background-color: #ffffff;
   border-radius: 8px;
   padding: 1rem;
+  color: black;
 }
 
 .message-list h2 {
@@ -185,6 +186,7 @@ h1 {
   background-color: #ffffff;
   border-radius: 8px;
   padding: 1rem;
+  color: black;
 }
 
 .player-list h2 {

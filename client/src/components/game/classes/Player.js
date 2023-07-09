@@ -1,5 +1,6 @@
 import {Actor} from "./Actor.js";
 import {Bomb} from "./Bomb.js";
+import {uiScene} from "@/components/game/scenes/ui/UI";
 
 export class Player extends Actor {
     constructor(scene, x, y, texture) {
@@ -58,6 +59,14 @@ export class Player extends Actor {
         }
     }
 
+    updatePlayer(player) {
+        console.log(player);
+        this.lives = player.lives;
+        this.score = player.score;
+        console.log(this.scene.socket.playerId !== this.playerId)
+        if (this.scene.socket.playerId !== this.playerId) return;
+        uiScene.setLife(this.lives);
+    }
 
     initAnimations(texture) {
         console.log(texture);

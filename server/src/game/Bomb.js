@@ -12,7 +12,6 @@ class Bomb {
         this.id = UUIDv4();
         this.x = x;
         this.y = y;
-        this.timer = 3;
     }
 }
 
