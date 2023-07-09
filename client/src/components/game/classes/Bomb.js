@@ -8,6 +8,7 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
         this.initAnimations();
         this.anims.play('burn', true);
         this.body.setImmovable(true);
+        this.setScale(0.4)
     }
 
     update() {
@@ -22,7 +23,7 @@ export class Bomb extends Phaser.Physics.Arcade.Sprite {
         this.anims.play('explosion', true);
 
         // Desenhar um círculo de explosão
-        const circle = new Phaser.Geom.Circle(this.x, this.y, 50);
+        const circle = new Phaser.Geom.Circle(this.x, this.y, 30);
         const graphics = this.scene.add.graphics({ fillStyle: { color: 0xff0000 } });
         graphics.fillCircleShape(circle);
         this.scene.time.addEvent({

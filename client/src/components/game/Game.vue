@@ -12,14 +12,14 @@ import {useGameStore} from "@/stores/game";
 
 const config = {
   type: Phaser.AUTO,
-  width: 608,
-  height: 512,
+  width: 720,
+  height: 624,
   parent: 'gameCanvas',
   physics: {
     default: 'arcade',
     arcade: {
       gravity: {y: 0},
-    }
+    },
   },
   backgroundColor: '#2d2d2d',
   scene: [Boot, PreGame, gameScene, uiScene]
