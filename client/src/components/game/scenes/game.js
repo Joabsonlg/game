@@ -86,6 +86,15 @@ const initMap = (context) => {
     context.wallsLayer = context.map.createLayer('walls', context.tileset, 0, 0);
     context.wallsLayer.setCollisionByProperty({collides: true});
 
+    context.cameras.main.setZoom(3)
+
+    // Centralize o mapa na tela
+    const centerX = context.map.widthInPixels / 2;
+    const centerY = context.map.heightInPixels / 2;
+    context.cameras.main.scrollX = centerX - context.cameras.main.width / 2;
+    context.cameras.main.scrollY = centerY - context.cameras.main.height / 2;
+
+
     // showDebugWalls(context);
 }
 

@@ -18,7 +18,6 @@ export default class UIScene extends Scene {
     }
 
     update() {
-        console.log('update ui');
         this.score.update();
     }
 }

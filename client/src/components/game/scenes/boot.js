@@ -23,7 +23,7 @@ export class Boot extends Phaser.Scene {
             key: 'tiles',
             url: 'tilemaps/tiles.png',
         });
-        this.load.tilemapTiledJSON('bomb-field', 'tilemaps/field2.json');
+        this.load.tilemapTiledJSON('bomb-field', 'tilemaps/campofinal.json');
     }
 
     create() {

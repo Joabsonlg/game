@@ -70,7 +70,6 @@ class GameServer {
 
             socket.on('addLobbyMessage', ({playerName, messageContent}) => {
                 this.lobby.addMessage(playerName, messageContent);
-                console.log()
                 this.io.emit('lobbyMessages', this.lobby.getMessages());
             });
 

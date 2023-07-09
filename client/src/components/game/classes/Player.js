@@ -8,7 +8,8 @@ export class Player extends Actor {
         this.sprite = texture;
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.speed = 110;
+        this.speed = 40;
+        this.setScale(0.4)
 
         this.movementMap = {
             left: {x: -this.speed, y: 0, animation: 'left'},
@@ -60,10 +61,8 @@ export class Player extends Actor {
     }
 
     updatePlayer(player) {
-        console.log(player);
         this.lives = player.lives;
         this.score = player.score;
-        console.log(this.scene.socket.playerId !== this.playerId)
         if (this.scene.socket.playerId !== this.playerId) return;
         uiScene.setLife(this.lives);
     }
@@ -77,7 +76,6 @@ export class Player extends Actor {
     }
 
     initAnimations(texture) {
-        console.log(texture);
         this.scene.anims.create({
             key: texture + 'left',
             frames: this.scene.anims.generateFrameNames(texture, {

@@ -81,10 +81,11 @@ class Game {
                 console.log(`A bomba ${bomb.id} explodiu`);
                 this.io.to(this.roomId).emit('bombExploded', bomb);
 
-                // verificar se existe algum jogador no raio de 50
+                // verificar se existe algum jogador no raio de 20
+                const radius = 30;
                 const players = this.players.filter((player) => {
-                    return player.position.x >= bomb.x - 50 && player.position.x <= bomb.x + 50 &&
-                        player.position.y >= bomb.y - 50 && player.position.y <= bomb.y + 50;
+                    return player.position.x >= bomb.x - radius && player.position.x <= bomb.x + radius &&
+                        player.position.y >= bomb.y - radius && player.position.y <= bomb.y + radius;
                 });
                 players.forEach((player) => {
                     player.removeLife();
