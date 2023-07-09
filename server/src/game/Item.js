@@ -19,6 +19,8 @@ class Item {
     /**
      * Apply the effect of the item to the player.
      * @param {Player} player - The player to apply the effect to.
+     * @param io
+     * @param roomId
      */
     applyEffect(player, io, roomId) {
         if (this.type === "life") {
@@ -28,13 +30,15 @@ class Item {
         }
 
         setTimeout(() => {
-            this.removeEffect(player);
+            this.removeEffect(player, io, roomId);
         }, 5000);
     }
 
     /**
      * Removes the effect of the item from the player.
      * @param {Player} player - The player to remove the effect from.
+     * @param io
+     * @param roomId
      */
     removeEffect(player, io, roomId) {
         if (this.type === "speed") {
