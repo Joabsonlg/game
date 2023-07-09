@@ -69,10 +69,8 @@ onMounted(() => {
     gameScene.explodeBomb(bomb);
   });
 
-  socket.on('itemCollected', ({ playerId, item }) => {
-    if (socket.playerId === playerId) {
-      playerStore.getPlayer.collectItem(item);
-    }
+  socket.on('itemCollected', (data) => {
+    gameScene.collectItem(data.itemCollected);
   });
 
   socket.on('playerUpdated', (player) => {

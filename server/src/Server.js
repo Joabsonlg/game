@@ -103,9 +103,8 @@ class GameServer {
             socket.on('startGame', (data) => {
                 const game = this.getGameByRoomId(data.roomId);
                 if (game) {
-                    game.start(socket.playerId);
-
                     game.generateItems();
+                    game.start(socket.playerId);
 
                     this.io.emit('availableGames', this.findAvailableGames());
                 } else {
@@ -136,15 +135,6 @@ class GameServer {
                 if (game) {
                     console.log(`O jogador ${data.playerId} levou dano`);
                     // game.addBomb(socket.playerId);
-                } else {
-                    this.io.to(socket.id).emit('error', {error: 'Game not found'});
-                }
-            });
-
-            socket.on('itemCollected', (data) => {
-                const game = this.getGameByRoomId(data.roomId);
-                if (game) {
-                    game.collectItem(socket.playerId);
                 } else {
                     this.io.to(socket.id).emit('error', {error: 'Game not found'});
                 }

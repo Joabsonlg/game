@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import {Player} from "../classes/Player.js";
 import {socket} from "@/assets/js/socket";
 import {Bomb} from "@/components/game/classes/Bomb";
+import {Item} from "@/components/game/classes/Item";
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -59,6 +60,16 @@ export default class Game extends Phaser.Scene {
     }
     
 
+    addItem(item) {
+        if (!this.items) {
+            this.items = this.add.group();
+        }
+
+        const itemGame = new Item(this, item.x, item.y, item.sprite);
+        itemGame.id = item.id;
+        this.items.add(itemGame.setDepth(1), true);
+    }
+
     findPlayerSpriteById(playerId) {
         return this.players.getChildren().find(sprite => sprite.playerId === playerId);
     }
@@ -88,6 +99,13 @@ export default class Game extends Phaser.Scene {
             return bomb.id === it.id
         });
         item.explode();
+    }
+
+    collectItem(item) {
+        const object = this.items.getChildren().find(it => {
+            return item.id === it.id
+        });
+        object.destroy();
     }
 }
 

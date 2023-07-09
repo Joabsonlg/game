@@ -51,10 +51,10 @@ class Player {
     }
 
     /**
-     * Increase the player's speed.
+     * set the player's speed.
      */
-    increaseSpeed() {
-        this.speed++;
+    setSpeed(value) {
+        this.speed = value;
     }
 
     /**
