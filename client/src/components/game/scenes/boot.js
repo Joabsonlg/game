@@ -14,6 +14,8 @@ export class Boot extends Phaser.Scene {
 
         this.load.image('logo', 'logo.svg');
         this.load.image('background', 'back2.png');
+        this.load.image('life', 'life.png');
+        this.load.image('speed', 'speed.png');
         this.load.atlas('bomb', 'bomba.png', 'bomba_atlas.json');
         this.load.atlas('player', 'player1.png', 'player1_atlas.json');
         this.load.atlas('player2', 'player2.png', 'player2_atlas.json');
@@ -38,6 +40,11 @@ export class Boot extends Phaser.Scene {
             const players = gameStore.gameState.players;
             players.forEach((player) => {
                 gameScene.addPlayer(player);
+            });
+
+            const items = gameStore.gameState.items;
+            items.forEach((item) => {
+                gameScene.addItem(item);
             });
 
             this.scene.start('game');

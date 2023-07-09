@@ -9,6 +9,7 @@ export class Player extends Actor {
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.speed = 40;
+        this.baseSpeed = 40;
         this.setScale(0.4)
 
         this.movementMap = {
@@ -63,16 +64,10 @@ export class Player extends Actor {
     updatePlayer(player) {
         this.lives = player.lives;
         this.score = player.score;
+        this.speed = this.baseSpeed * player.speed;
+        this.updateMovementMap();
         if (this.scene.socket.playerId !== this.playerId) return;
         uiScene.setLife(this.lives);
-    }
-
-    collectItem(item) {
-        this.scene.socket.emit('itemCollected', {
-          roomId: this.scene.roomId,
-          playerId: this.playerId,
-          item
-        });
     }
 
     initAnimations(texture) {
@@ -116,6 +111,15 @@ export class Player extends Actor {
             }),
             frameRate: 8,
         });
+    }
+
+    updateMovementMap() {
+        this.movementMap = {
+            left: {x: -this.speed, y: 0, animation: 'left'},
+            right: {x: this.speed, y: 0, animation: 'right'},
+            up: {x: 0, y: -this.speed, animation: 'up'},
+            down: {x: 0, y: this.speed, animation: 'down'}
+        };
     }
 
     definePosition(x, y) {

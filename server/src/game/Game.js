@@ -134,37 +134,48 @@ class Game {
     }
 
     /**
-    * Generate items for the game.
-    */
+     * Generate items for the game.
+     */
     generateItems() {
         const itemPositions = [
-        { x: 100, y: 100 },
-        { x: 200, y: 200 },
+            {x: 90, y: 80},
+            {x: 184, y: 170},
         ];
-    
-        // Itera sobre as posições dos itens e cria os objetos de item correspondentes
+
+        const types = ['life', 'speed'];
+
         itemPositions.forEach((position) => {
-        const item = new Item("BOTAR TIPO", position.x, position.y);
-        this.items.push(item);
+            const type = types[Math.floor(Math.random() * types.length)];
+            const item = new Item(type, position.x, position.y, type);
+            this.items.push(item);
         });
     }
 
     /**
-    * Handle a player collecting an item.
-    * @param {string} playerId - The id of the player who collected the item.
-    */
+     * Handle a player collecting an item.
+     * @param {string} playerId - The id of the player who collected the item.
+     */
     collectItem(playerId) {
         const player = this.players.find((player) => player.id === playerId);
 
         if (player) {
-            const item = this.items.find((item) => item.position.x === player.position.x && item.position.y === player.position.y);
+            // verificar se existe algum item na posição do player, considerar a largura e altura do player e do item
+            let itemCollected = null;
+            this.items.forEach((item) => {
+                if (player.position.x >= item.x - 20 && player.position.x <= item.x + 20 &&
+                    player.position.y >= item.y - 20 && player.position.y <= item.y + 20) {
+                    itemCollected = item;
+                }
+            });
 
-            if (item) {
-                item.applyEffect(player);
+            if (itemCollected) {
+                itemCollected.applyEffect(player, this.io, this.roomId);
 
-                this.io.to(this.roomId).emit('itemCollected', { playerId, item });
+                console.log(`O player ${playerId} coletou o item ${itemCollected.id}`);
+                this.io.to(this.roomId).emit('itemCollected', {playerId, itemCollected});
+                this.io.to(this.roomId).emit('playerUpdated', player);
 
-                const itemIndex = this.items.findIndex((i) => i.id === item.id);
+                const itemIndex = this.items.findIndex((i) => i.id === itemCollected.id);
                 if (itemIndex !== -1) {
                     this.items.splice(itemIndex, 1);
                 }
@@ -193,15 +204,20 @@ class Game {
 
         this.setStatus('STARTED');
 
-        const gameState = {
+        const gameState = this.getState();
+
+        this.io.to(this.roomId).emit('gameStarted', gameState);
+    }
+
+    getState = () => {
+        return {
             players: this.players,
             bombs: this.bombs,
+            items: this.items,
             gameStatus: this.gameStatus,
             roomId: this.roomId,
             principal: this.principal
         }
-
-        this.io.to(this.roomId).emit('gameStarted', gameState);
     }
 
     /**
@@ -213,6 +229,9 @@ class Game {
         if (player) {
             player.direction = direction;
             player.position = position;
+
+            this.collectItem(playerId);
+
             this.io.to(this.roomId).emit('playerMoved', player);
         } else {
             this.io.to(playerId).emit('error', {error: 'Player not found.'});
