@@ -61,7 +61,7 @@
               </div>
             </div>
             <div class="d-flex justify-content-center">
-              <button
+              <button style="margin-top: 1rem;"
                 @click="createGame"
                 v-if="availableGames.find((game) => game.owner === socket.id) === undefined"
                 class="ml-auto"
@@ -112,19 +112,6 @@ socket.on('availableGames', (games) => {
 
 socket.on('lobbyMessages', (lobbyMessages) => {
   messages.value = lobbyMessages;
-});
-
-socket.on('newPlayerInLobby', (player) => {
-  players.value.push(player);
-  addLobbyMessage(player.username, 'has entered the chat.');
-});
-
-socket.on('playerLeftLobby', (playerId) => {
-  const player = players.value.find((p) => p.id === playerId);
-  if (player) {
-    players.value = players.value.filter((p) => p.id !== playerId);
-    addLobbyMessage(player.username, 'has left the chat.');
-  }
 });
 
 socket.on('identified', (player) => {
@@ -202,6 +189,10 @@ h1 {
 
 .player-list h2 {
   margin-bottom: 0.5rem;
+}
+
+.d-flex{
+  justify-content: center;
 }
 
 ul {
