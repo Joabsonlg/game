@@ -1,4 +1,5 @@
 const Player = require("./Player");
+const Bomb = require("./Bomb");
 
 /**
  * Represents a game.

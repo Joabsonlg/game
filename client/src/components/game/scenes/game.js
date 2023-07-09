@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import {Player} from "../classes/Player.js";
 import {socket} from "@/assets/js/socket";
+import {Bomb} from "@/components/game/classes/Bomb";
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -10,9 +11,13 @@ export default class Game extends Phaser.Scene {
 
     create() {
         initMap(this);
-        this.bombs = [];
+
+        if (!this.bombs) {
+            this.bombs = this.add.group();
+        }
 
         this.physics.add.collider(this.players, this.wallsLayer);
+        this.physics.add.collider(this.players, this.bombs);
     }
 
     update() {
@@ -22,6 +27,11 @@ export default class Game extends Phaser.Scene {
 
         players.forEach((player) => {
             player.update();
+        });
+
+        const bombs = this.bombs.getChildren();
+        bombs.forEach((bomb) => {
+            bomb.update();
         });
     }
 
@@ -45,6 +55,11 @@ export default class Game extends Phaser.Scene {
         if (player.id === this.socket.playerId) return;
 
         playerGame.definePosition(player.position.x, player.position.y);
+    }
+
+    addBomb(bomb) {
+        const item = new Bomb(this, bomb.x, bomb.y, 'bomb');
+        this.bombs.add(item.setDepth(1), true);
     }
 }
 

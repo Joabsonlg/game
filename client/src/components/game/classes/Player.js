@@ -51,7 +51,10 @@ export class Player extends Actor {
 
         if (this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE).isDown && Date.now() - (this.lastBombTime || 0) > this.bombDelay) {
             this.lastBombTime = Date.now();
-            const bomb = new Bomb(this.scene, this.x, this.y, 'bomb');
+            this.scene.socket.emit('bombPlaced', {
+                roomId: this.scene.roomId,
+                position: {x: this.x, y: this.y}
+            });
         }
     }
 
