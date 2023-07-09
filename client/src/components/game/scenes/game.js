@@ -11,6 +11,10 @@ export default class Game extends Phaser.Scene {
     create() {
         initMap(this);
         this.bombs = [];
+
+        this.physics.add.collider(this.players, this.wallsLayer, (player, wall) => {
+            console.log('colidiu cacete do caralho');
+        });
     }
 
     update() {
@@ -20,21 +24,18 @@ export default class Game extends Phaser.Scene {
 
         players.forEach((player) => {
             player.update();
+            // showDebugPlayer(player);
         });
     }
 
     addPlayer(player) {
         if (!this.players) {
-            // Adiciona o grupo como um grupo de física
             this.players = this.add.group();
         }
 
         const playerGame = new Player(this, player.position.x, player.position.y, 'player');
         playerGame.playerId = player.id;
         this.players.add(playerGame.setDepth(1), true);
-        this.physics.add.collider(playerGame, this.wallsLayer);
-
-        showDebugPlayer(playerGame);
     }
 
     findPlayerSpriteById(playerId) {
@@ -60,7 +61,6 @@ const initMap = (context) => {
 
     context.wallsLayer = context.map.createLayer('walls', context.tileset, 0, 0);
     context.wallsLayer.setCollisionByProperty({collides: true});
-    console.log(context.wallsLayer);
 
     showDebugWalls(context);
 }
@@ -81,20 +81,21 @@ const showDebugPlayer = (player) => {
     player.scene.physics.world.createDebugGraphic();
 
     player.scene.physics.world.debugGraphic.clear();
+    player.body.debugGraphic.clear();
+
+    player.scene.physics.world.debugGraphic.lineStyle(1, 0xffffff);// branco
+    player.scene.physics.world.debugGraphic.strokeRect(player.body.position.x, player.body.position.y, player.body.width, player.body.height);
+    //
+    player.scene.physics.world.debugGraphic.fillStyle(0x0000ff, 0.5); // azul
+    player.scene.physics.world.debugGraphic.fillRect(player.body.position.x, player.body.position.y, player.body.width, player.body.height);
+
+    // Posição visual atual do player
     // player.scene.physics.world.debugGraphic.lineStyle(1, 0x00ff00); // verde
+    // player.scene.physics.world.debugGraphic.strokeRect(player.x - player.width / 2, player.y - player.height / 2, player.width, player.height);
+
+    // Posição do body do player
+    // player.scene.physics.world.debugGraphic.lineStyle(1, 0xff0000); // vermelho
     // player.scene.physics.world.debugGraphic.strokeRect(player.body.x, player.body.y, player.body.width, player.body.height);
-
-    // player.scene.physics.world.debugGraphic.fillStyle(0xff0000, 0.5); // vermelho
-    // player.scene.physics.world.debugGraphic.fillRect(player.body.x, player.body.y, player.body.width, player.body.height);
-
-    // player.scene.physics.world.debugGraphic.lineStyle(1, 0xffffff);// branco
-    // player.scene.physics.world.debugGraphic.strokeRect(player.body.position.x, player.body.position.y, player.body.width, player.body.height);
-    //
-    // player.scene.physics.world.debugGraphic.fillStyle(0x0000ff, 0.5); // azul
-    // player.scene.physics.world.debugGraphic.fillRect(player.body.position.x, player.body.position.y, player.body.width, player.body.height);
-    //
-    player.scene.physics.world.debugGraphic.lineStyle(1, 0x00ff00); // verde
-    player.scene.physics.world.debugGraphic.strokeRect(player.x, player.y, player.width, player.height);
     console.log('buceta')
 }
 
