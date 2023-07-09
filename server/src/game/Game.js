@@ -21,6 +21,14 @@ class Game {
     }
 
     /**
+     * Find a player by id.
+     * @param {string} playerId - The player's id.
+     */
+    findPlayer(playerId) {
+        return this.players.find((player) => player.id === playerId);
+    }
+
+    /**
      * Set the socket.io instance.
      * @param io
      */
@@ -78,10 +86,8 @@ class Game {
             this.io.to(this.roomId).emit('bombAdded', bomb);
             console.log(`A bomba ${bomb.id} foi adicionada`);
             setTimeout(() => {
-                console.log(`A bomba ${bomb.id} explodiu`);
                 this.io.to(this.roomId).emit('bombExploded', bomb);
 
-                // verificar se existe algum jogador no raio de 20
                 const radius = 30;
                 const players = this.players.filter((player) => {
                     return player.position.x >= bomb.x - radius && player.position.x <= bomb.x + radius &&
@@ -91,17 +97,12 @@ class Game {
                     player.removeLife();
                     this.io.to(this.roomId).emit('playerUpdated', player);
 
-
-                    console.log(player.lives)
                     if(player.lives === 0){
-                        console.log("DESGRAÇA MORREU")
                         this.io.to(this.roomId).emit('playerDead', player);
+                        this.players = this.players.filter((p) => p.id !== player.id);
                     }
-
-                    console.log(`O player ${player.id} perdeu uma vida`);
                 });
             }, 3000);
-            console.log(`A bomba ${bomb.id} vai explodir em 3 segundos`);
         }
     }
 

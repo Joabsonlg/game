@@ -7,7 +7,6 @@ export class Item extends Phaser.Physics.Arcade.Sprite {
         this.initAnimations();
         this.body.setImmovable(true);
         this.setScale(0.15)
-        showDebugItem(this);
         this.height = 16;
         this.width = 16;
     }
