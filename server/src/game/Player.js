@@ -17,6 +17,8 @@ class Player {
         this.alive = true;
         this.timeOfLastBomb = new Date();
         this.direction = 'down';
+        this.speed = 1;
+        this.fireRange = 50;
     }
 
     /**
@@ -32,6 +34,29 @@ class Player {
     removeLife() {
         this.lives--;
         if (this.lives === 0) this.alive = false;
+    }
+
+    /**
+     * Add a life to the player.
+     */
+    addLife() {
+        this.lives++;
+    }
+
+    /**
+     * Increase the player's speed.
+     */
+    increaseSpeed() {
+        this.speed++;
+    }
+
+    /**
+     * Increase the player's bombs range.
+     */
+    increaseFireRange(){
+        if(this.fireRange < 100){
+            this.fireRange += 10;
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 const Player = require("./Player");
 const Bomb = require("./Bomb");
+const Item = require("./Item");
 
 /**
  * Represents a game.
@@ -13,6 +14,7 @@ class Game {
         this.roomId = roomId;
         this.players = [];
         this.bombs = [];
+        this.items = [];
         this.gameStatus = 'WAITING';
         this.sprites = ['player', 'player2', 'player3', 'player4'];
         this.principal = principalId;
@@ -128,6 +130,45 @@ class Game {
 
         const bomb = this.findBomb(player.position.x, player.position.y);
         return !bomb;
+    }
+
+    /**
+    * Generate items for the game.
+    */
+    generateItems() {
+        const itemPositions = [
+        { x: 100, y: 100 },
+        { x: 200, y: 200 },
+        ];
+    
+        // Itera sobre as posições dos itens e cria os objetos de item correspondentes
+        itemPositions.forEach((position) => {
+        const item = new Item("BOTAR TIPO", position.x, position.y);
+        this.items.push(item);
+        });
+    }
+
+    /**
+    * Handle a player collecting an item.
+    * @param {string} playerId - The id of the player who collected the item.
+    */
+    collectItem(playerId) {
+        const player = this.players.find((player) => player.id === playerId);
+
+        if (player) {
+            const item = this.items.find((item) => item.position.x === player.position.x && item.position.y === player.position.y);
+
+            if (item) {
+                item.applyEffect(player);
+
+                this.io.to(this.roomId).emit('itemCollected', { playerId, item });
+
+                const itemIndex = this.items.findIndex((i) => i.id === item.id);
+                if (itemIndex !== -1) {
+                    this.items.splice(itemIndex, 1);
+                }
+            }
+        }
     }
 
     /**

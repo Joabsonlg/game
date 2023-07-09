@@ -8,6 +8,7 @@ const Lobby = require("./models/Lobby");
 const Message = require('./models/Message');
 const {v4: UUIDv4} = require('uuid');
 const Game = require("./game/Game");
+const Item = require("./game/Item");
 
 class GameServer {
     constructor() {
@@ -104,6 +105,9 @@ class GameServer {
                 const game = this.getGameByRoomId(data.roomId);
                 if (game) {
                     game.start(socket.playerId);
+
+                    game.generateItems();
+
                     this.io.emit('availableGames', this.findAvailableGames());
                 } else {
                     this.io.to(socket.id).emit('error', {error: 'Game not found'});
@@ -133,6 +137,15 @@ class GameServer {
                 if (game) {
                     console.log(`O jogador ${data.playerId} levou dano`);
                     // game.addBomb(socket.playerId);
+                } else {
+                    this.io.to(socket.id).emit('error', {error: 'Game not found'});
+                }
+            });
+
+            socket.on('itemCollected', (data) => {
+                const game = this.getGameByRoomId(data.roomId);
+                if (game) {
+                    game.collectItem(socket.playerId);
                 } else {
                     this.io.to(socket.id).emit('error', {error: 'Game not found'});
                 }
